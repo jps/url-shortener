@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <header>
         <h1>Link shortener</h1>
       </header>
-      <main>
+      <main className="content">
         <Component {...pageProps} />
       </main>
       <footer className="footer">James Spencer</footer>
