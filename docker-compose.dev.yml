@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  next-app:
-    container_name: url-shortener_app
+  app:
+    container_name: url-shortener-app
     build:
       context: ./app
       dockerfile: dev.Dockerfile
@@ -11,16 +11,28 @@ services:
       NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
     volumes:
       - ./app:/app
+      - /app/node_modules
     restart: always
     ports:
       - 3000:3000
     networks:
       - url-shortener
-
-# Add more containers below (nginx, postgres, etc.)
-
-# Define a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
+  api:
+    container_name: url-shortener-api
+    build:
+      context: ./api
+      dockerfile: dev.Dockerfile
+    environment:
+      ENV_VARIABLE: ${ENV_VARIABLE}
+      NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+    volumes:
+      - ./api:/api
+      - /api/node_modules
+    restart: always
+    ports:
+      - 3001:3001
+    networks:
+      - url-shortener
 networks:
   url-shortener:
     external: true
