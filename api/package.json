@@ -1,0 +1,18 @@
+{
+  "name": "url-shortener-api",
+  "version": "1.0.0",
+  "description": "express api for url shortener",
+  "private": true,
+  "author": "James Spencer",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
+}

@@ -1,7 +1,8 @@
 {
-  "name": "url-shortener",
+  "name": "url-shortener-app",
   "version": "0.1.0",
   "private": true,
+  "author": "James Spencer",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
