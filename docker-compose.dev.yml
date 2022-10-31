@@ -33,6 +33,14 @@ services:
       - 3001:3001
     networks:
       - url-shortener
+  db:
+    container_name: url-shortener-db
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - url-shortener
 networks:
   url-shortener:
     external: true

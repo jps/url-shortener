@@ -1,14 +1,26 @@
 import express from "express";
+import dotenv from "dotenv";
+import { Request, Response } from "express";
+import {
+  errorMiddleware,
+  requestLoggerMiddleware,
+  notFoundMiddleware,
+} from "./middleware";
+import { getRecentUrls, postUrl } from "./controllers";
 
+dotenv.config();
+
+const port = process.env.SERVER_PORT || 3001;
 const app = express();
-const port = 3001; // default port to listen //TODO: parameterize this
 
-// define a route handler for the default home page
-app.get( "/", ( req, res ) => {
-    res.send( "Hello world!" );
-} );
+app.use(requestLoggerMiddleware);
 
-// start the Express server
-app.listen( port, () => {
-    console.log( `server started at http://localhost:${ port }` );
-} );
+app.post("/urls", async (req: Request, res: Response) => await getRecentUrls(req, res));
+app.get("/urls/recent", async (req: Request, res: Response) => await postUrl(req, res));
+
+app.use(errorMiddleware);
+app.use(notFoundMiddleware);
+
+app.listen(port, () => {
+  console.log(`server started at http://localhost:${port}`);
+});
