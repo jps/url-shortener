@@ -11,12 +11,6 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-COPY pages ./pages
-COPY public ./public
-COPY styles ./styles
-COPY app ./app
-
-COPY next.config.js .
-COPY tsconfig.json .
+COPY . .
 
 CMD yarn dev
