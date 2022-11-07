@@ -5,6 +5,7 @@ import {
   errorMiddleware,
   requestLoggerMiddleware,
   notFoundMiddleware,
+  validatePostUrl,
 } from "./middleware";
 import { getRecentUrls, postUrl } from "./controllers";
 
@@ -14,9 +15,17 @@ const port = process.env.SERVER_PORT || 3001;
 const app = express();
 
 app.use(requestLoggerMiddleware);
+app.use(express.json());
 
-app.post("/urls", async (req: Request, res: Response) => await getRecentUrls(req, res));
-app.get("/urls/recent", async (req: Request, res: Response) => await postUrl(req, res));
+app.post(
+  "/urls",
+  validatePostUrl,
+  async (req: Request, res: Response) => await postUrl(req, res)
+);
+app.get(
+  "/urls/recent",
+  async (req: Request, res: Response) => await getRecentUrls(req, res)
+);
 
 app.use(errorMiddleware);
 app.use(notFoundMiddleware);

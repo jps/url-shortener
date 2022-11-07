@@ -19,10 +19,7 @@ either feedback to the user as we do currently or a default protocol could be ad
 */
 const schema = yup
   .object({
-    url: yup
-      .string()
-      .url("Please enter a valid url")
-      .required(),
+    url: yup.string().url("Please enter a valid url").max(4096).required(),
   })
   .required();
 
@@ -43,19 +40,19 @@ export default function Home() {
         <meta name="description" content="shorten any url for easy sharing" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <form
-        className="shorten-form"
-        onSubmit={handleSubmit(onSubmit)}
-        >
+      <form className="shorten-form" onSubmit={handleSubmit(onSubmit)}>
         <h2 className="shorten-form__title">Shorten URL</h2>
         <label className="visually-hidden" htmlFor="url">
           Url
         </label>
         {errors.url && (
-          <div role="alert" className="shorten-form__validation form-validation-message">
+          <div
+            role="alert"
+            className="shorten-form__validation form-validation-message"
+          >
             {errors.url.message}
           </div>
-        )}        
+        )}
         <input
           className={
             errors.url
@@ -66,7 +63,11 @@ export default function Home() {
           placeholder="Shorten your link e.g. https://example.com"
           required
         />
-        <input className="shorten-form__save form-submit" type="submit" value="Shorten" />
+        <input
+          className="shorten-form__save form-submit"
+          type="submit"
+          value="Shorten"
+        />
       </form>
       <RecentUrls urls={test_urls} />
     </>

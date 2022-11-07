@@ -9,7 +9,7 @@
     "start": "tsc && node .",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "test": "jest",
-    "test-watch": "jest --test --watch",
+    "test-watch": "jest --watch",
     "lint": "eslint ."
   },
   "dependencies": {

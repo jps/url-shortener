@@ -2,8 +2,8 @@ import { getMockReq, getMockRes } from "@jest-mock/express";
 import { postUrl } from "../urls-controller";
 import { saveAsShortenedUrl } from "../../services";
 import {
-  saveAsShortenedUrlFailureResponse as SaveAsShortenedUrlFailureResponse,
-  SaveAsShortenedUrlSuccessResponse as SaveAsShortenedUrlSuccessResponse,
+  saveAsShortenedUrlFailureResponse,
+  SaveAsShortenedUrlSuccessResponse,
 } from "../../services/url-shortener-service";
 
 jest.mock("../../services");
@@ -29,13 +29,6 @@ describe("urlsController", () => {
         },
       ],
       [
-        { status: "ValidationFailed", message: "Invalid url" },
-        400,
-        {
-          message: "Invalid request",
-        },
-      ],
-      [
         { status: "FailedToSave", message: "Server error" },
         500,
         {
@@ -45,14 +38,15 @@ describe("urlsController", () => {
     ];
 
     scenarios.forEach((scenario) => {
-      const [mockedServiceResponse, expectedStatusCode, expectedResult] = scenario;
+      const [mockedServiceResponse, expectedStatusCode, expectedResult] =
+        scenario;
       test(`should return statusCode:${expectedStatusCode} when service returns status:${mockedServiceResponse}`, async () => {
         const req = getPostUrlRequest();
 
         mockedSaveAsShortenedUrl.mockResolvedValue(
           mockedServiceResponse as
             | SaveAsShortenedUrlSuccessResponse
-            | SaveAsShortenedUrlFailureResponse
+            | saveAsShortenedUrlFailureResponse
         );
 
         await postUrl(req, res);
