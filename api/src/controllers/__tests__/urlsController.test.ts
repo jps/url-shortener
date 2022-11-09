@@ -2,7 +2,7 @@ import { getMockReq, getMockRes } from "@jest-mock/express";
 import { postUrl } from "../urls-controller";
 import { saveAsShortenedUrl } from "../../services";
 import {
-  saveAsShortenedUrlFailureResponse,
+  SaveAsShortenedUrlFailureResponse,
   SaveAsShortenedUrlSuccessResponse,
 } from "../../services/url-shortener-service";
 
@@ -46,7 +46,7 @@ describe("urlsController", () => {
         mockedSaveAsShortenedUrl.mockResolvedValue(
           mockedServiceResponse as
             | SaveAsShortenedUrlSuccessResponse
-            | saveAsShortenedUrlFailureResponse
+            | SaveAsShortenedUrlFailureResponse
         );
 
         await postUrl(req, res);
