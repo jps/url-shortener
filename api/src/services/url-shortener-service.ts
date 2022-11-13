@@ -1,7 +1,7 @@
 import { encode } from "../utilities";
 import { saveUrl, UrlRecord, getNextInSequence } from "../data";
 
-const baseUrl = process.env.BASE_URL;
+const baseUrl = process.env.SHORTENED_BASE_URL;
 
 export interface SaveAsShortenedUrlRequest {
   url: string;

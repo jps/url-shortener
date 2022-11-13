@@ -6,7 +6,7 @@ services:
       context: ./app
       dockerfile: dev.Dockerfile
     environment:
-      NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     volumes:
       - ./app:/app
       - /app/node_modules
@@ -24,6 +24,7 @@ services:
     environment:
       DB_CONN_STRING: mongodb://${MONGO_DB_API_USERNAME}:${MONGO_DB_API_PASSWORD}@${MONGO_DB_HOST}/${MONGO_DB_DATABASE_NAME}
       SHORTENED_BASE_URL: ${SHORTENED_BASE_URL}
+      APP_URL: ${APP_URL}
     volumes:
       - ./api:/api
       - /api/node_modules

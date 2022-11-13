@@ -21,7 +21,28 @@ export const getServerSideProps = async (): Promise<{
   };
 };
 
-const onSubmit = (data: object) => console.log(data);
+const onSubmit = async (data: object) => {
+  console.log(data);
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/urls`, {
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
+    if(response.status === 200) {
+      //set success page state, clear input field
+      alert('success');
+      return; 
+    }
+    throw new Error(`non 200 (${response.status}) status code`)
+  } catch (exception) {
+      alert('failed');
+  }
+};
 
 export default function Home({ recentUrls }: HomePageProps) {
   return (
