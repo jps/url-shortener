@@ -4,7 +4,7 @@
   "description": "express api for url shortener",
   "private": true,
   "author": "James Spencer",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "scripts": {
     "start": "tsc && node .",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",

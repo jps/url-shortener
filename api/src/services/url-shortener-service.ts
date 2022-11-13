@@ -1,5 +1,5 @@
 import { encode } from "../utilities";
-import { saveUrl, UrlRecord, getNextUrlId } from "../data";
+import { saveUrl, UrlRecord, getNextInSequence } from "../data";
 
 export interface SaveAsShortenedUrlRequest {
   url: string;
@@ -20,7 +20,13 @@ export const saveAsShortenedUrl = async (
   SaveAsShortenedUrlSuccessResponse | SaveAsShortenedUrlFailureResponse
 > => {
   try {
-    const id = await getNextUrlId();
+    /*
+    Potential future enhancement getting an id at a time isn't ideal as will put
+    extra load on the db, we could optimise here by getting a batch of ids at a
+    time e.g. get 1k and then popping out of a queue. This would reduce the
+    number of db calls significantly.
+    */
+    const id = await getNextInSequence("urlsId");
     const urlRecord: UrlRecord = {
       _id: id,
       url: request.url,
@@ -30,13 +36,14 @@ export const saveAsShortenedUrl = async (
 
     await saveUrl(urlRecord);
 
-    //TODO: get base url from env variable
+    const baseUrl = process.env.BASE_URL;
+
     return {
       status: "Success",
-      shortenedUrl: `http://jspenc.com/${urlRecord.encodedId}`,
+      shortenedUrl: `${baseUrl}/${urlRecord.encodedId}`,
     };
   } catch (exception) {
-    //console.error(`Failed to save url ${request.url}`, exception);
+    console.error(`Failed to save url ${request.url}`, exception);
     return {
       status: "FailedToSave",
       message: "Failed to save url",

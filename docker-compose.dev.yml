@@ -17,6 +17,8 @@ services:
       - 3000:3000
     networks:
       - url-shortener
+    depends_on:
+      - api
   api:
     container_name: url-shortener-api
     build:
@@ -25,6 +27,7 @@ services:
     environment:
       ENV_VARIABLE: ${ENV_VARIABLE}
       NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
+      DB_CONN_STRING: mongodb://${MONGO_DB_API_USERNAME}:${MONGO_DB_API_PASSWORD}@${MONGO_DB_HOST}/${MONGO_DB_DATABASE_NAME}
     volumes:
       - ./api:/api
       - /api/node_modules
@@ -33,6 +36,8 @@ services:
       - 3001:3001
     networks:
       - url-shortener
+    depends_on:
+      - db
   db:
     container_name: url-shortener-db
     image: mongo
@@ -41,6 +46,29 @@ services:
       - 27017:27017
     networks:
       - url-shortener
+    volumes:
+      - ./data/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - url_shortener_mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_DB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_DB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DB_DATABASE_NAME}
+  db-interface:
+    container_name: url-shortener-db-interface
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    networks:
+      - url-shortener
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_DB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_DB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_DB_ROOT_USERNAME}:${MONGO_DB_ROOT_PASSWORD}@${MONGO_DB_HOST}/
+    depends_on:
+      - db
 networks:
   url-shortener:
     external: true
+volumes:
+  url_shortener_mongo_data:

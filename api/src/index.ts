@@ -8,6 +8,7 @@ import {
   validatePostUrl,
 } from "./middleware";
 import { getRecentUrls, postUrl } from "./controllers";
+import { connectToDb } from "./data";
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ const app = express();
 
 app.use(requestLoggerMiddleware);
 app.use(express.json());
+
+connectToDb();
 
 app.post(
   "/urls",

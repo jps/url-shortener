@@ -4,12 +4,14 @@ import {
   SaveAsShortenedUrlSuccessResponse,
 } from "../url-shortener-service";
 import { mocked } from "jest-mock";
-import { getNextUrlId, saveUrl } from "../../data";
+import { getNextInSequence, saveUrl } from "../../data";
 
 jest.mock("../../data");
 jest.mock("../../utilities", () => ({ encode: jest.fn(() => "abcdefgh") }));
 
-const mockedGetNextUrlId = jest.mocked(getNextUrlId).mockResolvedValue(4687);
+const mockedGetNextUrlId = jest
+  .mocked(getNextInSequence)
+  .mockResolvedValue(4687);
 
 describe("urlShortenerService", () => {
   describe("saveAsShortenedUrl", () => {
