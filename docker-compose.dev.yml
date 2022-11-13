@@ -1,13 +1,11 @@
 version: '3'
 
 services:
-  app:
-    container_name: url-shortener-app
+  url-shortener-app:
     build:
       context: ./app
       dockerfile: dev.Dockerfile
     environment:
-      ENV_VARIABLE: ${ENV_VARIABLE}
       NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
     volumes:
       - ./app:/app
@@ -18,16 +16,14 @@ services:
     networks:
       - url-shortener
     depends_on:
-      - api
-  api:
-    container_name: url-shortener-api
+      - url-shortener-api
+  url-shortener-api:
     build:
       context: ./api
       dockerfile: dev.Dockerfile
     environment:
-      ENV_VARIABLE: ${ENV_VARIABLE}
-      NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
       DB_CONN_STRING: mongodb://${MONGO_DB_API_USERNAME}:${MONGO_DB_API_PASSWORD}@${MONGO_DB_HOST}/${MONGO_DB_DATABASE_NAME}
+      SHORTENED_BASE_URL: ${SHORTENED_BASE_URL}
     volumes:
       - ./api:/api
       - /api/node_modules
@@ -37,9 +33,8 @@ services:
     networks:
       - url-shortener
     depends_on:
-      - db
-  db:
-    container_name: url-shortener-db
+      - url-shortener-db
+  url-shortener-db:
     image: mongo
     restart: always
     ports:
@@ -50,11 +45,10 @@ services:
       - ./data/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - url_shortener_mongo_data:/data/db
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_DB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_DB_ROOT_PASSWORD}
-      - MONGO_INITDB_DATABASE=${MONGO_DB_DATABASE_NAME}
-  db-interface:
-    container_name: url-shortener-db-interface
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_DATABASE_NAME}
+  url-shortener-db-interface:
     image: mongo-express
     restart: always
     ports:
@@ -66,7 +60,7 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_DB_ROOT_PASSWORD}
       ME_CONFIG_MONGODB_URL: mongodb://${MONGO_DB_ROOT_USERNAME}:${MONGO_DB_ROOT_PASSWORD}@${MONGO_DB_HOST}/
     depends_on:
-      - db
+      - url-shortener-db
 networks:
   url-shortener:
     external: true

@@ -1,5 +1,7 @@
 import { getRecentUrls } from "../data";
 
+const baseUrl = process.env.SHORTENED_BASE_URL;
+
 export interface RecentUrlsFailureResponse {
   status: "FailedToGet";
   message: string;
@@ -7,14 +9,13 @@ export interface RecentUrlsFailureResponse {
 
 export interface RecentUrlsUrlSuccessResponse {
   status: "Success";
-  shortenedUrls: string[];
+  urls: string[];
 }
 
 export const recentUrls = async (): Promise<
   RecentUrlsFailureResponse | RecentUrlsUrlSuccessResponse
 > => {
   try {
-    const baseUrl = process.env.BASE_URL;
     const recentUrls = await getRecentUrls();
     const urlsWithBasePrepended = recentUrls.map(
       (url) => `${baseUrl}/${url.encodedId}`
@@ -22,7 +23,7 @@ export const recentUrls = async (): Promise<
 
     return {
       status: "Success",
-      shortenedUrls: urlsWithBasePrepended,
+      urls: urlsWithBasePrepended,
     };
   } catch (exception) {
     console.error(`Failed to get recent urls`, exception);

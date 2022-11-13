@@ -1,6 +1,8 @@
 import { encode } from "../utilities";
 import { saveUrl, UrlRecord, getNextInSequence } from "../data";
 
+const baseUrl = process.env.BASE_URL;
+
 export interface SaveAsShortenedUrlRequest {
   url: string;
 }
@@ -35,8 +37,6 @@ export const saveAsShortenedUrl = async (
     };
 
     await saveUrl(urlRecord);
-
-    const baseUrl = process.env.BASE_URL;
 
     return {
       status: "Success",

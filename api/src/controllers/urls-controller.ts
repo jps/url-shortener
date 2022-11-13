@@ -6,7 +6,7 @@ export const getRecentUrls = async (req: Request, res: Response) => {
   switch (result.status) {
     case "Success":
       return res.status(200).json({
-        urls: result.shortenedUrls,
+        urls: result.urls,
       });
     case "FailedToGet":
       return res.status(500).json({
