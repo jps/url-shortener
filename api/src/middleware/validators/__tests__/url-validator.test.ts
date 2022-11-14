@@ -5,8 +5,7 @@ describe("urlValidator", () => {
   describe("postUrl", () => {
     const { res, next } = getMockRes();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const instantiateBodyUrl = (url: any) => ({
+    const instantiateBodyUrl = (url: unknown) => ({
       body: {
         url: url,
       },
@@ -28,8 +27,7 @@ describe("urlValidator", () => {
       })
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const invalidRequests: any = [
+    const invalidRequests = [
       { ...instantiateBodyUrl("invalidurl") },
       { ...instantiateBodyUrl("http://invalidurl") },
       { ...instantiateBodyUrl("ftp://invalidurl") },
@@ -41,8 +39,7 @@ describe("urlValidator", () => {
       [],
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    invalidRequests.forEach((request: any) =>
+    invalidRequests.forEach((request) =>
       test("should return status code 400 when invalid request", async () => {
         const req = getMockReq(request);
         await validatePostUrl(req, res, next);
