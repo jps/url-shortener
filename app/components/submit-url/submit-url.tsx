@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
@@ -26,12 +27,26 @@ export const SubmitUrl = ({ onSubmit }: SubmitUrlProps) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<formData>({
     resolver: yupResolver(schema),
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmitHandler = (data: formData) => {
+    try {
+      setIsSubmitting(true);
+      onSubmit(data);
+      reset();
+    } catch (exception) {
+      //TODO: feedback to user if there is a server error
+    }
+    setIsSubmitting(false);
+  };
+
   return (
-    <form className="shorten-form" onSubmit={handleSubmit(onSubmit)}>
+    <form className="shorten-form" onSubmit={handleSubmit(onSubmitHandler)}>
       <h2 className="shorten-form__title">Shorten URL</h2>
       <label className="visually-hidden" htmlFor="url">
         Url
@@ -58,6 +73,7 @@ export const SubmitUrl = ({ onSubmit }: SubmitUrlProps) => {
         className="shorten-form__save form-submit"
         type="submit"
         value="Shorten"
+        disabled={isSubmitting}
       />
     </form>
   );
