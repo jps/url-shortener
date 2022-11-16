@@ -1,6 +1,10 @@
 import Head from "next/head";
 import { useState } from "react";
-import { RecentUrls, SubmitUrl, SuccessMessage } from "../components";
+import {
+  RecentUrls,
+  SubmitUrlForm as ShortenUrlForm,
+  SuccessMessage,
+} from "../components";
 
 interface HomePageProps {
   recentUrls: string[];
@@ -17,7 +21,7 @@ export const getServerSideProps = async (): Promise<{
 });
 
 const fetchRecentUrls = async (url: string) => {
-  let recentUrls = [];
+  let recentUrls: Array<string> = [];
   try {
     const res = await fetch(url);
     const recentUrlsData = await res.json();
@@ -68,7 +72,7 @@ export default function Home({ recentUrls: _recentUrls }: HomePageProps) {
         <meta name="description" content="shorten any url for easy sharing" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <SubmitUrl onSubmit={onSubmit} />
+      <ShortenUrlForm onSubmit={onSubmit} />
       {successMessage && <SuccessMessage shortenedUrl={successMessage} />}
       {recentUrls.length > 0 && <RecentUrls urls={recentUrls} />}
     </>

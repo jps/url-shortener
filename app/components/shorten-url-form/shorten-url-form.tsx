@@ -7,8 +7,8 @@ interface formData {
   url: string;
 }
 
-export interface SubmitUrlProps {
-  onSubmit: (data: formData) => void;
+export interface ShortenUrlFormProps {
+  onSubmit: (data: formData) => Promise<void>
 }
 
 /*
@@ -22,7 +22,7 @@ const schema = yup
   })
   .required();
 
-export const SubmitUrl = ({ onSubmit }: SubmitUrlProps) => {
+export const SubmitUrlForm = ({ onSubmit }: ShortenUrlFormProps) => {
   const {
     register,
     handleSubmit,
@@ -34,10 +34,10 @@ export const SubmitUrl = ({ onSubmit }: SubmitUrlProps) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmitHandler = (data: formData) => {
+  const onSubmitHandler = async (data: formData) => {
     try {
       setIsSubmitting(true);
-      onSubmit(data);
+      await onSubmit(data);
       reset();
     } catch (exception) {
       //TODO: feedback to user if there is a server error

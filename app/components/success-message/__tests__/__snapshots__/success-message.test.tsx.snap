@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SuccessMessage should render as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="success-message"
+  >
+    <h2
+      class="success-message__title"
+    >
+      Your URL has been shortened
+    </h2>
+    <p
+      class="success-message__text"
+    >
+      <a
+        href="https://example.com"
+      >
+        https://example.com
+      </a>
+    </p>
+  </div>
+</DocumentFragment>
+`;

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecentUrls should render as expected 1`] = `
+<DocumentFragment>
+  <div
+    class="recent-urls"
+  >
+    <h2>
+      Recent URLs
+    </h2>
+    <ul
+      class="recent-urls__list"
+    >
+      <li
+        class="recent-urls__list-item"
+      >
+        <a
+          href="https://jspenc.com/238748"
+        >
+          https://jspenc.com/238748
+        </a>
+      </li>
+      <li
+        class="recent-urls__list-item"
+      >
+        <a
+          href="https://jspenc.com/rzo87mwn"
+        >
+          https://jspenc.com/rzo87mwn
+        </a>
+      </li>
+    </ul>
+  </div>
+</DocumentFragment>
+`;
