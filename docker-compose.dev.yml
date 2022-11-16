@@ -6,7 +6,8 @@ services:
       context: ./app
       dockerfile: dev.Dockerfile
     environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXT_PUBLIC_API_URL: ${PUBLIC_API_URL}
+      INTERNAL_API_URL: ${INTERNAL_API_URL}
     volumes:
       - ./app:/app
       - /app/node_modules

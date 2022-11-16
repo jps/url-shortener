@@ -15,8 +15,8 @@ export const getServerSideProps = async (): Promise<{
 }> => ({
   props: {
     recentUrls: await fetchRecentUrls(
-      `http://url-shortener-api:3001/urls/recent`
-    ), //TODO env var
+      `${process.env.INTERNAL_API_URL}/urls/recent`
+    ),
   },
 });
 
@@ -37,7 +37,6 @@ export default function Home({ recentUrls: _recentUrls }: HomePageProps) {
   const [recentUrls, setRecentUrls] = useState<string[]>(_recentUrls);
 
   const onSubmit = async (data: object) => {
-    console.log(data);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/urls`, {
         mode: "cors",
@@ -48,18 +47,18 @@ export default function Home({ recentUrls: _recentUrls }: HomePageProps) {
         body: JSON.stringify(data),
       });
 
-      if (response.status === 200) {
-        //set success page state, clear input field
-        const responseJson = await response.json();
-        setSuccessMessage(responseJson.shortenedUrl);
-        let updatedRecentUrls = [
-          responseJson.shortenedUrl,
-          ...recentUrls,
-        ].slice(0, 20);
-        setRecentUrls(updatedRecentUrls);
-        return;
+      if (response.status !== 200) {
+        throw new Error(`non 200 (${response.status}) status code`);
       }
-      throw new Error(`non 200 (${response.status}) status code`);
+
+      const responseJson = await response.json();
+      setSuccessMessage(responseJson.shortenedUrl);
+      let updatedRecentUrls = [responseJson.shortenedUrl, ...recentUrls].slice(
+        0,
+        20
+      );
+      setRecentUrls(updatedRecentUrls);
+      return;
     } catch (exception) {
       alert("failed"); //TODO we could better handle this for the user
     }
