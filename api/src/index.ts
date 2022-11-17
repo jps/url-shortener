@@ -32,6 +32,7 @@ app.post(
 
 app.get(
   "/urls/recent",
+  cors(corsOptions),
   async (req: Request, res: Response) => await getRecentUrls(req, res)
 );
 

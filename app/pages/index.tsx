@@ -6,62 +6,46 @@ import {
   SuccessMessage,
 } from "../components";
 
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchRecentUrlsExternal } from "../clients";
+import {
+  fetchRecentUrlsInternal,
+  postUrl,
+  RecentUrlsUrlSuccessResponse,
+} from "../clients/url-client";
+
 interface HomePageProps {
-  recentUrls: string[];
+  recentUrls: RecentUrlsUrlSuccessResponse | undefined;
 }
 
 export const getServerSideProps = async (): Promise<{
   props: HomePageProps;
 }> => ({
   props: {
-    recentUrls: await fetchRecentUrls(
-      `${process.env.INTERNAL_API_URL}/urls/recent`
-    ),
+    recentUrls: await fetchRecentUrlsInternal(),
   },
 });
 
-const fetchRecentUrls = async (url: string) => {
-  let recentUrls: Array<string> = [];
-  try {
-    const res = await fetch(url);
-    const recentUrlsData = await res.json();
-    recentUrls = recentUrlsData.urls;
-  } catch (exception) {
-    console.error("failed to get recent urls", exception);
-  }
-  return recentUrls;
-};
-
 export default function Home({ recentUrls: _recentUrls }: HomePageProps) {
+  const queryClient = useQueryClient();
   const [successMessage, setSuccessMessage] = useState<string>();
-  const [recentUrls, setRecentUrls] = useState<string[]>(_recentUrls);
+
+  const fetchUrlsQuery = useQuery({
+    queryKey: ["recentUrls"],
+    queryFn: fetchRecentUrlsExternal,
+    initialData: _recentUrls,
+  });
+
+  const postUrlMutation = useMutation({
+    mutationFn: postUrl,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["recentUrls"] });
+      setSuccessMessage(data.shortenedUrl);
+    },
+  });
 
   const onSubmit = async (data: object) => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/urls`, {
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-
-      if (response.status !== 200) {
-        throw new Error(`non 200 (${response.status}) status code`);
-      }
-
-      const responseJson = await response.json();
-      setSuccessMessage(responseJson.shortenedUrl);
-      let updatedRecentUrls = [responseJson.shortenedUrl, ...recentUrls].slice(
-        0,
-        20
-      );
-      setRecentUrls(updatedRecentUrls);
-      return;
-    } catch (exception) {
-      alert("failed"); //TODO we could better handle this for the user
-    }
+    postUrlMutation.mutate(data);
   };
 
   return (
@@ -73,7 +57,9 @@ export default function Home({ recentUrls: _recentUrls }: HomePageProps) {
       </Head>
       <ShortenUrlForm onSubmit={onSubmit} />
       {successMessage && <SuccessMessage shortenedUrl={successMessage} />}
-      {recentUrls.length > 0 && <RecentUrls urls={recentUrls} />}
+      {fetchUrlsQuery.data?.urls && fetchUrlsQuery.data?.urls.length > 0 && (
+        <RecentUrls urls={fetchUrlsQuery.data.urls} />
+      )}
     </>
   );
 }
