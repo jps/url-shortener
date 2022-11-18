@@ -17,17 +17,15 @@ const fetchRecentUrls = async (
   }
 };
 
-export const fetchRecentUrlsInternal = (): Promise<
+export const fetchRecentUrlsInternal = async (): Promise<
   RecentUrlsUrlSuccessResponse | undefined
-> => fetchRecentUrls(`${process.env.INTERNAL_API_URL}/urls/recent`);
+> => await fetchRecentUrls(`${process.env.INTERNAL_API_URL}/urls/recent`);
 
 export const fetchRecentUrlsExternal = async (): Promise<
   RecentUrlsUrlSuccessResponse | undefined
-> => {
-  return await fetchRecentUrls(
-    `${process.env.NEXT_PUBLIC_API_URL}/urls/recent`
-  );
-};
+> => await fetchRecentUrls(
+  `${process.env.NEXT_PUBLIC_API_URL}/urls/recent`
+);
 
 export const postUrl = async (
   data: object
@@ -41,7 +39,7 @@ export const postUrl = async (
     body: JSON.stringify(data),
   });
   if (response.status === 200) {
-    return response.json();
+    return await response.json();
   }
   throw new Error("Failed to save");
 };
