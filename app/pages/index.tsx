@@ -1,13 +1,10 @@
 import { useState } from "react";
-import { RecentUrls, ShortenUrlForm, SuccessMessage } from "../components";
-
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchRecentUrlsExternal } from "../clients";
 import {
   fetchRecentUrlsInternal,
-  postUrl,
   RecentUrlsUrlSuccessResponse,
 } from "../clients/url-client";
+import { RecentUrls, ShortenUrlForm, SuccessMessage } from "../components";
+import { useFetchUrlsQuery, usePostUrlMutation } from "../hooks";
 
 interface HomePageProps {
   recentUrls: RecentUrlsUrlSuccessResponse | undefined;
@@ -21,25 +18,12 @@ export const getServerSideProps = async (): Promise<{
   },
 });
 
-export default function Home({ recentUrls }: HomePageProps) {
-  const queryClient = useQueryClient();
+export const Home = ({ recentUrls }: HomePageProps) => {
   const [successMessage, setSuccessMessage] = useState<string>();
-
-  const fetchUrlsQuery = useQuery({
-    queryKey: ["recentUrls"],
-    queryFn: fetchRecentUrlsExternal,
-    initialData: recentUrls,
-    refetchOnWindowFocus: false,
-    staleTime: 1000,
-  });
-
-  const postUrlMutation = useMutation({
-    mutationFn: postUrl,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["recentUrls"] });
-      setSuccessMessage(data.shortenedUrl);
-    },
-  });
+  const fetchUrlsQuery = useFetchUrlsQuery(recentUrls);
+  const postUrlMutation = usePostUrlMutation((data) =>
+    setSuccessMessage(data.shortenedUrl)
+  );
 
   return (
     <>
@@ -50,4 +34,6 @@ export default function Home({ recentUrls }: HomePageProps) {
       )}
     </>
   );
-}
+};
+
+export default Home;
