@@ -42,11 +42,11 @@ Mongo express will run on [http://localhost:8081](http://localhost:8081)
 
 ## Next Steps / Improvements
 
-- [] Setup e2e tests with Cypress
-- [] Improve error handling states on front end.
-- [] Add loading states for form and recent urls list.
-- [] Handle urls that are missing protocols a bit better to improve UX.
-- [] Optimise sequence generation in the API e.g. get next 1k.
-- [] Investigate migrating to use new Next.js sever components.
-- [] Add package for allow code sharing between App/API
-- [] Add OpenAPI spec which we can generate HTTP client from 
+- [ ] Setup e2e tests with Cypress
+- [ ] Improve error handling states on front end.
+- [ ] Add loading states for form and recent urls list.
+- [ ] Handle urls that are missing protocols a bit better to improve UX.
+- [ ] Optimise sequence generation in the API e.g. get next 1k.
+- [ ] Investigate migrating to use new Next.js sever components.
+- [ ] Add package for allow code sharing between App/API
+- [ ] Add OpenAPI spec which we can generate HTTP client from 
