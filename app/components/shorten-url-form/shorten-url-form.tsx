@@ -3,12 +3,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
-interface formData {
+export interface ShortenFormData {
   url: string;
 }
 
 export interface ShortenUrlFormProps {
-  onSubmit: (data: formData) => Promise<void>
+  onSubmit: (data: ShortenFormData) => void;
 }
 
 /*
@@ -22,22 +22,22 @@ const schema = yup
   })
   .required();
 
-export const SubmitUrlForm = ({ onSubmit }: ShortenUrlFormProps) => {
+export const ShortenUrlForm = ({ onSubmit }: ShortenUrlFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<formData>({
+  } = useForm<ShortenFormData>({
     resolver: yupResolver(schema),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmitHandler = async (data: formData) => {
+  const onSubmitHandler = async (data: ShortenFormData) => {
     try {
       setIsSubmitting(true);
-      await onSubmit(data);
+      onSubmit(data);
       reset();
     } catch (exception) {
       //TODO: feedback to user if there is a server error

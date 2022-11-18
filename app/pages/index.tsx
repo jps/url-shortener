@@ -1,10 +1,5 @@
-import Head from "next/head";
 import { useState } from "react";
-import {
-  RecentUrls,
-  SubmitUrlForm as ShortenUrlForm,
-  SuccessMessage,
-} from "../components";
+import { RecentUrls, ShortenUrlForm, SuccessMessage } from "../components";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchRecentUrlsExternal } from "../clients";
@@ -26,14 +21,16 @@ export const getServerSideProps = async (): Promise<{
   },
 });
 
-export default function Home({ recentUrls: _recentUrls }: HomePageProps) {
+export default function Home({ recentUrls }: HomePageProps) {
   const queryClient = useQueryClient();
   const [successMessage, setSuccessMessage] = useState<string>();
 
   const fetchUrlsQuery = useQuery({
     queryKey: ["recentUrls"],
     queryFn: fetchRecentUrlsExternal,
-    initialData: _recentUrls,
+    initialData: recentUrls,
+    refetchOnWindowFocus: false,
+    staleTime: 1000,
   });
 
   const postUrlMutation = useMutation({
@@ -44,18 +41,9 @@ export default function Home({ recentUrls: _recentUrls }: HomePageProps) {
     },
   });
 
-  const onSubmit = async (data: object) => {
-    postUrlMutation.mutate(data);
-  };
-
   return (
     <>
-      <Head>
-        <title>Url Shortener</title>
-        <meta name="description" content="shorten any url for easy sharing" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <ShortenUrlForm onSubmit={onSubmit} />
+      <ShortenUrlForm onSubmit={postUrlMutation.mutate} />
       {successMessage && <SuccessMessage shortenedUrl={successMessage} />}
       {fetchUrlsQuery.data?.urls && fetchUrlsQuery.data?.urls.length > 0 && (
         <RecentUrls urls={fetchUrlsQuery.data.urls} />
