@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ShortenUrlForm should render as expected 1`] = `
+<DocumentFragment>
+  <form
+    class="shorten-form"
+  >
+    <h2
+      class="shorten-form__title"
+    >
+      Shorten URL
+    </h2>
+    <label
+      class="visually-hidden"
+      for="url"
+    >
+      Url
+    </label>
+    <input
+      class="shorten-form__input form-text-input"
+      id="url"
+      name="url"
+      placeholder="Shorten your link e.g. https://example.com"
+      required=""
+    />
+    <input
+      class="shorten-form__save form-submit"
+      type="submit"
+      value="Shorten"
+    />
+  </form>
+</DocumentFragment>
+`;

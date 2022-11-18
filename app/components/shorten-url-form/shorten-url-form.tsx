@@ -60,11 +60,10 @@ export const ShortenUrlForm = ({ onSubmit }: ShortenUrlFormProps) => {
         </div>
       )}
       <input
-        className={
-          errors.url
-            ? "shorten-form__input form-text-input form-text-input--invalid"
-            : "shorten-form__input form-text-input"
-        }
+        id="url"
+        className={`shorten-form__input form-text-input${
+          errors.url ? " form-text-input--invalid" : ""
+        }`}
         {...register("url")}
         placeholder="Shorten your link e.g. https://example.com"
         required
