@@ -1,10 +1,9 @@
-import { useState } from "react";
 import {
   fetchRecentUrlsInternal,
   RecentUrlsUrlSuccessResponse,
 } from "../clients/url-client";
 import { RecentUrls, ShortenUrlForm, SuccessMessage } from "../components";
-import { useFetchUrlsQuery, usePostUrlMutation } from "../hooks";
+import { useFetchUrlsQuery, usePostUrlMutation, useSavedUrl } from "../hooks";
 
 interface HomePageProps {
   recentUrls: RecentUrlsUrlSuccessResponse | undefined;
@@ -19,16 +18,18 @@ export const getServerSideProps = async (): Promise<{
 });
 
 export const Home = ({ recentUrls }: HomePageProps) => {
-  const [successMessage, setSuccessMessage] = useState<string>();
   const fetchUrlsQuery = useFetchUrlsQuery(recentUrls);
-  const postUrlMutation = usePostUrlMutation((data) =>
-    setSuccessMessage(data.shortenedUrl)
-  );
+  const postUrlMutation = usePostUrlMutation();
+  const savedUrlQuery = useSavedUrl();
 
   return (
     <>
       <ShortenUrlForm onSubmit={postUrlMutation.mutate} />
-      {successMessage && <SuccessMessage shortenedUrl={successMessage} />}
+      {savedUrlQuery.isFetched && (
+        <SuccessMessage
+          shortenedUrl={savedUrlQuery.data?.shortenedUrl as string}
+        />
+      )}
       {fetchUrlsQuery.data?.urls && fetchUrlsQuery.data?.urls.length > 0 && (
         <RecentUrls urls={fetchUrlsQuery.data.urls} />
       )}

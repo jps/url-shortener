@@ -1,0 +1,144 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`index should should render as expected when no recent urls 1`] = `
+<DocumentFragment>
+  <form
+    class="shorten-form"
+  >
+    <h2
+      class="shorten-form__title"
+    >
+      Shorten URL
+    </h2>
+    <label
+      class="visually-hidden"
+      for="url"
+    >
+      Url
+    </label>
+    <input
+      class="shorten-form__input form-text-input"
+      id="url"
+      name="url"
+      placeholder="Shorten your link e.g. https://example.com"
+      required=""
+    />
+    <input
+      class="shorten-form__save form-submit"
+      type="submit"
+      value="Shorten"
+    />
+  </form>
+</DocumentFragment>
+`;
+
+exports[`index should should render as expected when recent urls 1`] = `
+<DocumentFragment>
+  <form
+    class="shorten-form"
+  >
+    <h2
+      class="shorten-form__title"
+    >
+      Shorten URL
+    </h2>
+    <label
+      class="visually-hidden"
+      for="url"
+    >
+      Url
+    </label>
+    <input
+      class="shorten-form__input form-text-input"
+      id="url"
+      name="url"
+      placeholder="Shorten your link e.g. https://example.com"
+      required=""
+    />
+    <input
+      class="shorten-form__save form-submit"
+      type="submit"
+      value="Shorten"
+    />
+  </form>
+  <div
+    class="recent-urls"
+  >
+    <h2>
+      Recent URLs
+    </h2>
+    <ul
+      class="recent-urls__list"
+    >
+      <li
+        class="recent-urls__list-item"
+      >
+        <a
+          href="https://jspenc.com/abcdefg"
+        >
+          https://jspenc.com/abcdefg
+        </a>
+      </li>
+      <li
+        class="recent-urls__list-item"
+      >
+        <a
+          href="https://jspenc.com/123456"
+        >
+          https://jspenc.com/123456
+        </a>
+      </li>
+    </ul>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`index should should render as expected when success message 1`] = `
+<DocumentFragment>
+  <form
+    class="shorten-form"
+  >
+    <h2
+      class="shorten-form__title"
+    >
+      Shorten URL
+    </h2>
+    <label
+      class="visually-hidden"
+      for="url"
+    >
+      Url
+    </label>
+    <input
+      class="shorten-form__input form-text-input"
+      id="url"
+      name="url"
+      placeholder="Shorten your link e.g. https://example.com"
+      required=""
+    />
+    <input
+      class="shorten-form__save form-submit"
+      type="submit"
+      value="Shorten"
+    />
+  </form>
+  <div
+    class="success-message"
+  >
+    <h2
+      class="success-message__title"
+    >
+      Your URL has been shortened
+    </h2>
+    <p
+      class="success-message__text"
+    >
+      <a
+        href="https://jspenc.com/87654321"
+      >
+        https://jspenc.com/87654321
+      </a>
+    </p>
+  </div>
+</DocumentFragment>
+`;
